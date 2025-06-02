@@ -56,8 +56,9 @@ def dashboard():
     return render_template('main_dashboard.html', data=filtered_data, filter_option=filter_option)
 
 @app.route('/ttn/uplink', methods=['POST'])
-def ttn_uplink():
+def uplink():
     payload = request.get_json()
+    print("Received from TTN:", data)
     try:
         decoded = payload['uplink_message']['decoded_payload']
         received_at = payload['received_at']
