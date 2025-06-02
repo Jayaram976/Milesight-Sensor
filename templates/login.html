@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Sortyx</title>
+  <style>
+    body { font-family: Arial; background-color: #f0f4f8; }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      margin-top: 100px;
+      text-align: center;
+    }
+    img { width: 120px; float: left; margin-right: 15px; }
+    h2 { color: #004080; }
+    input[type=text], input[type=password] {
+      width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box;
+    }
+    button { background-color: #004080; color: white; padding: 10px; width: 100%; border: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="display: flex; align-items: center;">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Sortyx Logo">
+      <h2>SORTYX LOGIN</h2>
+    </div>
+    <form method="POST">
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</body>
+</html>
+
+

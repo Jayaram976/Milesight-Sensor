@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome - Sortyx</title>
+  <style>
+    body { background-color: #121212; color: white; text-align: center; margin-top: 100px; }
+    img { width: 150px; }
+    h1 { font-size: 3em; color: #00c9a7; }
+  </style>
+</head>
+<body>
+  <img src="{{ url_for('static', filename='logo.png') }}" alt="Sortyx Logo">
+  <h1>SORTYX</h1>
+  <p>Smart Environment Monitoring</p>
+  <script>
+    setTimeout(() => { window.location.href = "/login"; }, 3000);
+  </script>
+</body>
+</html>
