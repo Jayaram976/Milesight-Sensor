@@ -13,6 +13,7 @@
     select, input[type=date] { padding: 6px 10px; margin-right: 10px; }
     form { margin-top: 20px; }
     .filter-bar { display: flex; align-items: center; gap: 10px; }
+    #spinner { display: none; margin-left: 10px; color: #0077b6; }
   </style>
 </head>
 <body>
@@ -35,56 +36,75 @@
     </select>
     <input type="date" name="date" id="dateInput" style="display:none;">
     <button type="submit">Apply</button>
+    <span id="spinner">🔄 Refreshing...</span>
   </form>
 </div>
 
 <div class="card">
   <h2>Device Data</h2>
-  {% if data %}
-  <table>
-    <thead>
-      <tr>
-        <th>Device ID</th>
-        <th>Battery (%)</th>
-        <th>Distance (cm)</th>
-        <th>Tilt</th>
-        <th>Timestamp (IST)</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for entry in data|reverse %}
-      <tr>
-        <td>{{ entry.device_id }}</td>
-        <td>{{ entry.battery }}</td>
-        <td>{{ entry.distance }}</td>
-        <td>{{ entry.tilt }}</td>
-        <td>{{ entry.time }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-  <p>No data available for selected filter.</p>
-  {% endif %}
+  <div id="data-table">
+    {% if data %}
+    <table>
+      <thead>
+        <tr>
+          <th>Device ID</th>
+          <th>Battery (%)</th>
+          <th>Distance (cm)</th>
+          <th>Tilt</th>
+          <th>Timestamp (IST)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in data|reverse %}
+        <tr>
+          <td>{{ entry.device_id }}</td>
+          <td>{{ entry.battery }}</td>
+          <td>{{ entry.distance }}</td>
+          <td>{{ entry.tilt }}</td>
+          <td>{{ entry.time }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No data available for selected filter.</p>
+    {% endif %}
+  </div>
 </div>
 
 <script>
   function toggleDateInput(value) {
     const dateInput = document.getElementById('dateInput');
-    if (value === 'date') {
-      dateInput.style.display = 'inline-block';
-    } else {
-      dateInput.style.display = 'none';
-    }
+    dateInput.style.display = value === 'date' ? 'inline-block' : 'none';
   }
 
   window.onload = function () {
-    const filterValue = document.getElementById('filter').value;
-    toggleDateInput(filterValue);
+    toggleDateInput(document.getElementById('filter').value);
   };
+
+  function refreshData() {
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'inline';
+
+    fetch(window.location.href, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newTable = doc.querySelector('#data-table');
+        const currentTable = document.querySelector('#data-table');
+
+        if (newTable && currentTable) {
+          currentTable.innerHTML = newTable.innerHTML;
+          window.scrollTo({ top: currentTable.offsetTop, behavior: 'smooth' });
+        }
+      })
+      .catch(err => console.error('Data refresh failed:', err))
+      .finally(() => spinner.style.display = 'none');
+  }
+
+  setInterval(refreshData, 30000); // every 30 seconds
 </script>
 
 </body>
 </html>
-
-

@@ -1,0 +1,13 @@
+{
+  "end_device_ids": {
+    "device_id": "test-device"
+  },
+  "received_at": "2025-06-02T12:30:00.000000Z",
+  "uplink_message": {
+    "decoded_payload": {
+      "battery": 99,
+      "distance": 180,
+      "tilt": "normal"
+    }
+  }
+}
